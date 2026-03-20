@@ -1,0 +1,6 @@
+@socialcrap_HostAddress = http://localhost:5167
+
+GET {{socialcrap_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
