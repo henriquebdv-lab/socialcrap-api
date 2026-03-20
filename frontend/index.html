@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Social Crap</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1 align="center">💩 Social Crap</h1>
+</header>
+
+<main style="max-width: 600px; margin: 20px auto;">
+
+<!-- FORM -->
+<div class="card">
+    <h2>Novo Crap</h2>
+
+    <input id="mensagem" placeholder="Digite seu crap" style="width:100%; padding:8px; margin-bottom:10px;">
+    <button onclick="criarCrap()">Enviar</button>
+
+    <p id="status"></p>
+</div>
+
+<!-- LISTA -->
+<div>
+    <h2>Feed</h2>
+    <ul id="lista" style="list-style: none; padding: 0;"></ul>
+</div>
+```
+
+</main>
+
+<script>
+    const api = "http://localhost:5167/api/Crap";
+
+    async function carregarCraps() {
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "<li>Carregando...</li>";
+
+        try {
+            const response = await fetch(api);
+            const dados = await response.json();
+
+            lista.innerHTML = "";
+
+            if (!dados.length) {
+                lista.innerHTML = "<li>Nenhum crap ainda 💩</li>";
+                return;
+            }
+
+            dados.forEach(c => {
+                const li = document.createElement("li");
+                li.className = "card";
+
+                li.innerHTML = `
+                    <strong>${c.usuarioNome}</strong>
+                    <p>${c.mensagem}</p>
+                    <button onclick="removerCrap(${c.id})" class="button-secondary">Excluir</button>
+                `;
+
+                lista.appendChild(li);
+            });
+
+        } catch (error) {
+            lista.innerHTML = "<li>Erro ao carregar dados</li>";
+        }
+    }
+
+    async function criarCrap() {
+        const mensagemInput = document.getElementById("mensagem");
+        const status = document.getElementById("status");
+
+        const mensagem = mensagemInput.value.trim();
+
+        if (!mensagem) {
+            status.innerText = "Digite alguma coisa 😅";
+            return;
+        }
+
+        status.innerText = "Enviando...";
+
+        try {
+            await fetch(api, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    mensagem: mensagem,
+                    usuarioId: 1
+                })
+            });
+
+            mensagemInput.value = "";
+            status.innerText = "Crap enviado 💩";
+
+            carregarCraps();
+
+        } catch {
+            status.innerText = "Erro ao enviar 😢";
+        }
+    }
+
+    async function removerCrap(id) {
+        if (!confirm("Excluir esse crap?")) return;
+
+        try {
+            await fetch(`${api}/${id}`, {
+                method: "DELETE"
+            });
+
+            carregarCraps();
+        } catch {
+            alert("Erro ao excluir");
+        }
+    }
+
+    carregarCraps();
+</script>
+
+</body>
+</html>
