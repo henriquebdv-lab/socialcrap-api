@@ -4,27 +4,27 @@ using SocialCrap.Service;
 
 namespace SocialCrap.Controllers
 {
-    // Endpoints para gerenciar usuarios.
+    // Endpoints para gerenciar amizades.
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class AmizadeController : ControllerBase
     {
-        private readonly IUsuarioService _service;
+        private readonly IAmizadeService _service;
 
-        public UsuarioController(IUsuarioService service)
+        public AmizadeController(IAmizadeService service)
         {
             _service = service;
         }
 
-        // Lista todos os usuarios.
+        // Lista todas as amizades.
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var usuarios = await _service.GetAllAsync();
-            return Ok(usuarios);
+            var amizades = await _service.GetAllAsync();
+            return Ok(amizades);
         }
 
-        // Busca usuario por id.
+        // Busca amizade por id.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -36,9 +36,9 @@ namespace SocialCrap.Controllers
             return Ok(result.Data);
         }
 
-        // Cria usuario.
+        // Envia solicitacao de amizade.
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] UsuarioCreateRequest request)
+        public async Task<IActionResult> Post([FromBody] AmizadeCreateRequest request)
         {
             var result = await _service.CreateAsync(request);
 
@@ -48,11 +48,11 @@ namespace SocialCrap.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Data!.Id }, result.Data);
         }
 
-        // Atualiza nome e email.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UsuarioUpdateRequest request)
+        // Aceita solicitacao pendente.
+        [HttpPut("{id}/aceitar")]
+        public async Task<IActionResult> Aceitar(int id)
         {
-            var result = await _service.UpdateAsync(id, request);
+            var result = await _service.AceitarAsync(id);
 
             if (result.NotFound)
                 return NotFound();
@@ -60,14 +60,14 @@ namespace SocialCrap.Controllers
             if (!result.Success)
                 return BadRequest(result.Error);
 
-            return Ok(result.Data);
+            return Ok(new { mensagem = "Amizade aceita." });
         }
 
-        // Troca senha do usuario.
-        [HttpPut("{id}/senha")]
-        public async Task<IActionResult> UpdateSenha(int id, [FromBody] UsuarioSenhaRequest request)
+        // Recusa solicitacao pendente.
+        [HttpPut("{id}/recusar")]
+        public async Task<IActionResult> Recusar(int id)
         {
-            var result = await _service.UpdateSenhaAsync(id, request);
+            var result = await _service.RecusarAsync(id);
 
             if (result.NotFound)
                 return NotFound();
@@ -75,10 +75,10 @@ namespace SocialCrap.Controllers
             if (!result.Success)
                 return BadRequest(result.Error);
 
-            return Ok(new { mensagem = "Senha atualizada com sucesso." });
+            return Ok(new { mensagem = "Amizade recusada." });
         }
 
-        // Remove usuario.
+        // Remove amizade.
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

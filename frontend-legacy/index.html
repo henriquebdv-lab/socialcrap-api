@@ -10,33 +10,34 @@
 <body>
 
 <header>
-    <h1 align="center">💩 Social Crap</h1>
+    <h1 align="center" class="app-title">Social Crap</h1>
 </header>
 
 <main style="max-width: 600px; margin: 20px auto;">
 
-<!-- FORM -->
+<!-- FORMULARIO: cria um novo crap -->
 <div class="card">
     <h2>Novo Crap</h2>
 
-    <input id="mensagem" placeholder="Digite seu crap" style="width:100%; padding:8px; margin-bottom:10px;">
+    <input id="mensagem" class="input-full" placeholder="Digite seu crap">
     <button onclick="criarCrap()">Enviar</button>
 
-    <p id="status"></p>
+    <p id="status" class="status"></p>
 </div>
 
-<!-- LISTA -->
+<!-- LISTA: mostra o feed -->
 <div>
     <h2>Feed</h2>
     <ul id="lista" style="list-style: none; padding: 0;"></ul>
 </div>
-```
 
 </main>
 
 <script>
+    // URL base da API
     const api = "http://localhost:5167/api/Crap";
 
+    // Carrega e renderiza os craps no feed
     async function carregarCraps() {
         const lista = document.getElementById("lista");
         lista.innerHTML = "<li>Carregando...</li>";
@@ -48,7 +49,7 @@
             lista.innerHTML = "";
 
             if (!dados.length) {
-                lista.innerHTML = "<li>Nenhum crap ainda 💩</li>";
+                lista.innerHTML = "<li>Nenhum crap ainda ðŸ’©</li>";
                 return;
             }
 
@@ -70,6 +71,7 @@
         }
     }
 
+    // Envia um novo crap para a API
     async function criarCrap() {
         const mensagemInput = document.getElementById("mensagem");
         const status = document.getElementById("status");
@@ -77,10 +79,12 @@
         const mensagem = mensagemInput.value.trim();
 
         if (!mensagem) {
-            status.innerText = "Digite alguma coisa 😅";
+            status.className = "status status-warn";
+            status.innerText = "Digite alguma coisa.";
             return;
         }
 
+        status.className = "status status-info";
         status.innerText = "Enviando...";
 
         try {
@@ -96,15 +100,18 @@
             });
 
             mensagemInput.value = "";
-            status.innerText = "Crap enviado 💩";
+            status.className = "status status-success";
+            status.innerText = "Crap enviado.";
 
             carregarCraps();
 
         } catch {
-            status.innerText = "Erro ao enviar 😢";
+            status.className = "status status-error";
+            status.innerText = "Erro ao enviar.";
         }
     }
 
+    // Remove um crap pelo id
     async function removerCrap(id) {
         if (!confirm("Excluir esse crap?")) return;
 
@@ -119,6 +126,7 @@
         }
     }
 
+    // Primeira carga do feed ao abrir a pagina
     carregarCraps();
 </script>
 

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SocialCrap.Models;
 
 namespace SocialCrap.Data
@@ -19,7 +19,11 @@ namespace SocialCrap.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Amizade tem dois relacionamentos com Usuário, por isso mapeamos ambos.
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Amizade tem dois relacionamentos com Usuario, por isso mapeamos ambos.
             modelBuilder.Entity<Amizade>()
                 .HasOne(a => a.Usuario)
                 .WithMany(u => u.AmizadesEnviadas)
@@ -32,11 +36,19 @@ namespace SocialCrap.Data
                 .HasForeignKey(a => a.AmigoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Amizade>()
+                .HasIndex(a => new { a.UsuarioId, a.AmigoId })
+                .IsUnique();
+
             modelBuilder.Entity<Poop>()
                 .HasOne(p => p.Usuario)
                 .WithMany(u => u.Poops)
                 .HasForeignKey(p => p.UsuarioId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Poop>()
+                .HasIndex(p => new { p.UsuarioId, p.CrapId })
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

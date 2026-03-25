@@ -15,3 +15,5 @@ packages/
 *.db
 *.db-shm
 *.db-wal
+*.fontend
+.npm-cache/

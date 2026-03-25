@@ -4,27 +4,27 @@ using SocialCrap.Service;
 
 namespace SocialCrap.Controllers
 {
-    // Endpoints para criar e listar craps.
+    // Endpoints para registrar reacoes (poops).
     [ApiController]
     [Route("api/[controller]")]
-    public class CrapController : ControllerBase
+    public class PoopController : ControllerBase
     {
-        private readonly ICrapService _service;
+        private readonly IPoopService _service;
 
-        public CrapController(ICrapService service)
+        public PoopController(IPoopService service)
         {
             _service = service;
         }
 
-        // Lista todos os craps com um payload enxuto.
+        // Lista todos os poops.
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var craps = await _service.GetAllAsync();
-            return Ok(craps);
+            var poops = await _service.GetAllAsync();
+            return Ok(poops);
         }
 
-        // Busca um crap por id.
+        // Busca poop por id.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -36,9 +36,9 @@ namespace SocialCrap.Controllers
             return Ok(result.Data);
         }
 
-        // Cria um novo crap.
+        // Cria um poop.
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CrapCreateRequest request)
+        public async Task<IActionResult> Post([FromBody] PoopCreateRequest request)
         {
             var result = await _service.CreateAsync(request);
 
@@ -48,22 +48,7 @@ namespace SocialCrap.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Data!.Id }, result.Data);
         }
 
-        // Atualiza a mensagem de um crap.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CrapUpdateRequest request)
-        {
-            var result = await _service.UpdateAsync(id, request);
-
-            if (result.NotFound)
-                return NotFound();
-
-            if (!result.Success)
-                return BadRequest(result.Error);
-
-            return Ok(result.Data);
-        }
-
-        // Remove um crap.
+        // Remove um poop.
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

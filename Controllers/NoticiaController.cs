@@ -4,27 +4,27 @@ using SocialCrap.Service;
 
 namespace SocialCrap.Controllers
 {
-    // Endpoints para gerenciar usuarios.
+    // Endpoints para gerenciar noticias.
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class NoticiaController : ControllerBase
     {
-        private readonly IUsuarioService _service;
+        private readonly INoticiaService _service;
 
-        public UsuarioController(IUsuarioService service)
+        public NoticiaController(INoticiaService service)
         {
             _service = service;
         }
 
-        // Lista todos os usuarios.
+        // Lista todas as noticias.
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var usuarios = await _service.GetAllAsync();
-            return Ok(usuarios);
+            var noticias = await _service.GetAllAsync();
+            return Ok(noticias);
         }
 
-        // Busca usuario por id.
+        // Busca noticia por id.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -36,9 +36,9 @@ namespace SocialCrap.Controllers
             return Ok(result.Data);
         }
 
-        // Cria usuario.
+        // Cria uma noticia.
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] UsuarioCreateRequest request)
+        public async Task<IActionResult> Post([FromBody] NoticiaCreateRequest request)
         {
             var result = await _service.CreateAsync(request);
 
@@ -48,9 +48,9 @@ namespace SocialCrap.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Data!.Id }, result.Data);
         }
 
-        // Atualiza nome e email.
+        // Atualiza titulo e conteudo.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UsuarioUpdateRequest request)
+        public async Task<IActionResult> Put(int id, [FromBody] NoticiaUpdateRequest request)
         {
             var result = await _service.UpdateAsync(id, request);
 
@@ -63,22 +63,7 @@ namespace SocialCrap.Controllers
             return Ok(result.Data);
         }
 
-        // Troca senha do usuario.
-        [HttpPut("{id}/senha")]
-        public async Task<IActionResult> UpdateSenha(int id, [FromBody] UsuarioSenhaRequest request)
-        {
-            var result = await _service.UpdateSenhaAsync(id, request);
-
-            if (result.NotFound)
-                return NotFound();
-
-            if (!result.Success)
-                return BadRequest(result.Error);
-
-            return Ok(new { mensagem = "Senha atualizada com sucesso." });
-        }
-
-        // Remove usuario.
+        // Remove noticia.
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,12 +1,18 @@
-using System;
+﻿using System;
 
 namespace SocialCrap.DTOs
 {
-    // Corpo da requisição para criar um crap.
+    // Corpo da requisicao para criar um crap.
     public class CrapCreateRequest
     {
         public string Mensagem { get; set; } = string.Empty;
         public int UsuarioId { get; set; }
+    }
+
+    // Corpo da requisicao para atualizar um crap.
+    public class CrapUpdateRequest
+    {
+        public string Mensagem { get; set; } = string.Empty;
     }
 
     // Payload de resposta para listagem e detalhe.

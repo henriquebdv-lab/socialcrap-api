@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --sand-100: #f6f0e6;
+  --sand-200: #efe4d3;
+  --sand-300: #e3d2b8;
+  --coffee-500: #7a4f37;
+  --coffee-700: #5c3a2a;
+  --coffee-900: #3c241b;
+  --cocoa-100: #fbf7f1;
+  --cocoa-200: #f1e7d9;
+  --cocoa-300: #dccab2;
+  --accent-500: #b77a4b;
+  --accent-700: #925a33;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

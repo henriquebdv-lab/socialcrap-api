@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SocialCrap.Service;
 
 namespace SocialCrap.Models
 {
-    // Raiz de agregado do usuário.
+    // Raiz de agregado do usuario.
     public class Usuario
     {
         public int Id { get; private set; }
@@ -24,12 +25,12 @@ namespace SocialCrap.Models
         // Construtor do EF
         public Usuario() { }
 
-        // Construtor de domínio
+        // Construtor de dominio
         public Usuario(string nome, string email, string senha)
         {
             Nome = nome;
             Email = email;
-            Senha = senha;
+            Senha = PasswordHasher.Hash(senha);
         }
 
         public bool AtualizarPerfil(string nome, string email)
@@ -44,10 +45,10 @@ namespace SocialCrap.Models
 
         public bool AtualizarSenha(string senhaAtual, string novaSenha)
         {
-            if (senhaAtual != Senha || string.IsNullOrWhiteSpace(novaSenha))
+            if (!PasswordHasher.Verify(senhaAtual, Senha) || string.IsNullOrWhiteSpace(novaSenha))
                 return false;
 
-            Senha = novaSenha;
+            Senha = PasswordHasher.Hash(novaSenha);
             return true;
         }
     }

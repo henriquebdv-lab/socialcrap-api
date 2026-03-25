@@ -23,6 +23,10 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
+.app-title::before {
+  content: "💩 ";
+}
+
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -51,4 +55,32 @@ button:hover {
 
 .button-secondary:hover {
   background: var(--brown-dark);
+}
+
+.input-full {
+  /* Mantem o input dentro do card mesmo com padding */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.status {
+  margin-top: 8px;
+}
+
+.status-info::after {
+  content: " ⏳";
+}
+
+.status-success::after {
+  content: " ✅";
+}
+
+.status-warn::after {
+  content: " ⚠️";
+}
+
+.status-error::after {
+  content: " 😢";
 }
